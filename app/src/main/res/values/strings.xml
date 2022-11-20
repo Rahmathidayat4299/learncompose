@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FoodMinang</string>
+    <string name="search_food">Search Food</string>
+    <string name="scroll_to_top">scroll to top</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_home">Home</string>
+    <string name="email">hrahmat950@gmail.com</string>
+    <string name="nama">Rahmat Hidayat</string>
+</resources>
