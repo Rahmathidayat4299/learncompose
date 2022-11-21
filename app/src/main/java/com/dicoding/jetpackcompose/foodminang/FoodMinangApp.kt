@@ -1,7 +1,6 @@
 package com.dicoding.jetpackcompose.foodminang
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,64 +20,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dicoding.jetpackcompose.HomeScreen
-import com.dicoding.jetpackcompose.foodminang.data.FoodRepository
+import androidx.navigation.navArgument
+import com.dicoding.jetpackcompose.foodminang.screen.home.HomeScreen
 import com.dicoding.jetpackcompose.foodminang.navigation.NavigationItem
 import com.dicoding.jetpackcompose.foodminang.navigation.Screen
+import com.dicoding.jetpackcompose.foodminang.screen.detail.DetailScreen
 import com.dicoding.jetpackcompose.foodminang.ui.theme.FoodMinangTheme
-import com.dicoding.jetpackcompose.foodminang.viewmodel.FoodMinangViewModel
-import com.dicoding.jetpackcompose.foodminang.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
 /**
  * Created by Rahmat Hidayat on 20/11/2022.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FoodMinangApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: FoodMinangViewModel = viewModel(factory = ViewModelFactory(FoodRepository()))
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val groupedFood by viewModel.groupFood.collectAsState()
-    val query by viewModel.query
     Box(modifier = modifier) {
         val scope = rememberCoroutineScope()
         val listState = rememberLazyListState()
         val showButton: Boolean by remember {
             derivedStateOf { listState.firstVisibleItemIndex > 0 }
         }
-//        LazyColumn(
-//            state = listState,
-//            contentPadding = PaddingValues(bottom = 80.dp)
-//        ) {
-//            item {
-//                SearchBar(
-//                    query = query,
-//                    onQueryChange = viewModel::search,
-//                    modifier = Modifier.background(MaterialTheme.colors.primary)
-//                )
-//            }
-//            items(listFood, key = { it.id }) { food ->
-//                FoodListItem(
-//                    name = food.name,
-//                    photoUrl = food.imageUrl,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .animateItemPlacement(tween(durationMillis = 100))
-//
-//                )
-//            }
-//        }
         AnimatedVisibility(
             visible = showButton,
             enter = fadeIn() + slideInVertically(),
@@ -108,7 +80,24 @@ fun FoodMinangApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateToDetail = { rewardId ->
+                        navController.navigate(Screen.DetailScreen.createRoute(rewardId))
+                    })
+            }
+            composable(
+                route = Screen.DetailScreen.route,
+                arguments = listOf(navArgument("foodId")
+                { type = NavType.LongType }),
+            ) {
+                val id = it.arguments?.getLong("foodId") ?: -1L
+                DetailScreen(
+                    foodId = id,
+                    navigateBack = { navController.navigateUp() }
+                )
+                {
+
+                }
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
@@ -116,7 +105,6 @@ fun FoodMinangApp(
         }
     }
 }
-
 
 
 @Preview(showBackground = true)
@@ -127,37 +115,6 @@ fun JetHeroesAppPreview() {
     }
 }
 
-
-////add
-//@Composable
-//fun FoodListItem(
-//    name: String,
-//    photoUrl: String,
-//    modifier: Modifier = Modifier
-//) {
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = modifier.clickable {}
-//    ) {
-//        AsyncImage(
-//            model = photoUrl,
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .padding(8.dp)
-//                .size(60.dp)
-//                .clip(CircleShape)
-//        )
-//        Text(
-//            text = name,
-//            fontWeight = FontWeight.Medium,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .weight(1f)
-//                .padding(start = 16.dp)
-//        )
-//    }
-//}
 @Composable
 fun ScrollToTopButton(
     onClick: () -> Unit,
@@ -180,6 +137,7 @@ fun ScrollToTopButton(
         )
     }
 }
+
 @Composable
 fun SearchBar(
     query: String,
@@ -211,6 +169,7 @@ fun SearchBar(
             .clip(RoundedCornerShape(16.dp))
     )
 }
+
 //bottom nav
 @Composable
 private fun BottomBar(
@@ -260,15 +219,3 @@ private fun BottomBar(
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun FoodListItemPreview() {
-//    FoodMinangTheme {
-//        FoodListItem(
-//            name = "Sala lauak",
-//            photoUrl = ""
-//        )
-//    }
-//}

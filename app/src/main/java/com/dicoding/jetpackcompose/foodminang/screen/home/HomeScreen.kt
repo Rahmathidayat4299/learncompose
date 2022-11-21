@@ -1,15 +1,11 @@
-package com.dicoding.jetpackcompose
+package com.dicoding.jetpackcompose.foodminang.screen.home
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,57 +20,48 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.dicoding.jetpackcompose.foodminang.SearchBar
-import com.dicoding.jetpackcompose.foodminang.data.FoodRepository
-import com.dicoding.jetpackcompose.foodminang.model.FoodData
+import com.dicoding.jetpackcompose.foodminang.Injection
+import com.dicoding.jetpackcompose.foodminang.ViewModelFactory
+import com.dicoding.jetpackcompose.foodminang.model.FoodList
+import com.dicoding.jetpackcompose.foodminang.screen.HomeViewModel
 import com.dicoding.jetpackcompose.foodminang.ui.theme.FoodMinangTheme
-import com.dicoding.jetpackcompose.foodminang.viewmodel.FoodMinangViewModel
-import com.dicoding.jetpackcompose.foodminang.viewmodel.ViewModelFactory
+import com.dicoding.jetpackcompose.foodminang.util.UiState
 
 /**
  * Created by Rahmat Hidayat on 20/11/2022.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: FoodMinangViewModel = viewModel(factory = ViewModelFactory(FoodRepository()))
+    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository())),
+    navigateToDetail: (Long) -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    val groupedFood by viewModel.groupFood.collectAsState()
-    val query by viewModel.query
     Box(modifier = modifier) {
         val scope = rememberCoroutineScope()
         val listState = rememberLazyListState()
         val showButton: Boolean by remember {
             derivedStateOf { listState.firstVisibleItemIndex > 0 }
         }
-        LazyColumn(
-            state = listState,
-            contentPadding = PaddingValues(bottom = 80.dp)
-        ) {
-            item {
-                SearchBar(
-                    query = query,
-                    onQueryChange = viewModel::search,
-                    modifier = Modifier.background(MaterialTheme.colors.primary)
-                )
-            }
-            items(FoodData.listFood, key = { it.id }) { food ->
-                FoodListItem(
-                    name = food.name,
-                    photoUrl = food.imageUrl,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItemPlacement(tween(durationMillis = 100))
-
-                )
+        viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
+            when (uiState) {
+                is UiState.Loading -> {
+                    viewModel.getListFood()
+                }
+                is UiState.Success -> {
+                    HomeContent(
+                        orderReward = uiState.data,
+                        modifier = modifier,
+                        navigateToDetail = navigateToDetail,
+                    )
+                }
+                is UiState.Error -> {}
             }
         }
     }
 }
+
 //add
 @Composable
 fun FoodListItem(
@@ -103,6 +90,30 @@ fun FoodListItem(
                 .weight(1f)
                 .padding(start = 16.dp)
         )
+    }
+}
+
+@Composable
+fun HomeContent(
+    orderReward: List<FoodList>,
+    modifier: Modifier = Modifier,
+    navigateToDetail: (Long) -> Unit,
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        items(orderReward) { data ->
+            FoodListItem(
+                name = data.food.name,
+                photoUrl = data.food.imageUrl,
+                modifier = Modifier.clickable {
+                    navigateToDetail(data.food.id)
+                }
+            )
+
+        }
     }
 }
 

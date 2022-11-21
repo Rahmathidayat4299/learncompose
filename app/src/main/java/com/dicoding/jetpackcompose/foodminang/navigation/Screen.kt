@@ -5,5 +5,8 @@ package com.dicoding.jetpackcompose.foodminang.navigation
  */
 sealed class Screen(val route: String) {
     object Home : Screen("home")
+    object DetailScreen : Screen("home/{foodId}") {
+        fun createRoute(foodId: Long) = "home/$foodId"
+    }
     object Profile : Screen("profile")
 }
