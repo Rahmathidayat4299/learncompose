@@ -35,7 +35,9 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository())),
-    navigateToDetail: (Long) -> Unit
+    navigateToDetail: (Long) -> Unit,
+
+
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     Box(modifier = modifier) {
@@ -54,6 +56,7 @@ fun HomeScreen(
                         orderReward = uiState.data,
                         modifier = modifier,
                         navigateToDetail = navigateToDetail,
+                        onItemClicked = navigateToDetail
                     )
                 }
                 is UiState.Error -> {}
@@ -65,13 +68,17 @@ fun HomeScreen(
 //add
 @Composable
 fun FoodListItem(
+    id:Long,
     name: String,
     photoUrl: String,
+    onItemClicked: (id: Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable {}
+        modifier = modifier.clickable {
+            onItemClicked.invoke(id)
+        }
     ) {
         AsyncImage(
             model = photoUrl,
@@ -98,6 +105,7 @@ fun HomeContent(
     orderReward: List<FoodList>,
     modifier: Modifier = Modifier,
     navigateToDetail: (Long) -> Unit,
+    onItemClicked: (id: Long) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -106,24 +114,30 @@ fun HomeContent(
     ) {
         items(orderReward) { data ->
             FoodListItem(
+                id = data.food.id,
                 name = data.food.name,
                 photoUrl = data.food.imageUrl,
                 modifier = Modifier.clickable {
                     navigateToDetail(data.food.id)
-                }
+
+                },
+                onItemClicked = onItemClicked
             )
 
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun FoodListItemPreview() {
-    FoodMinangTheme {
-        FoodListItem(
-            name = "Sala lauak",
-            photoUrl = ""
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun FoodListItemPreview() {
+//    FoodMinangTheme {
+//        FoodListItem(
+//            name = "Sala lauak",
+//            photoUrl = "",
+//            99,
+//            onItemClicked = { Long, _ ->  },
+//
+//        )
+//    }
+//}

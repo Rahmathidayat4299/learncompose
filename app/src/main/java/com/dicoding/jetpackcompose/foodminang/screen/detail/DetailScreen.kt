@@ -37,8 +37,6 @@ fun DetailScreen(
             Injection.provideRepository()
         )
     ),
-    navigateBack: () -> Unit,
-    navigateToCart: () -> Unit
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {

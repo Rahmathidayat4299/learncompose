@@ -93,11 +93,8 @@ fun FoodMinangApp(
                 val id = it.arguments?.getLong("foodId") ?: -1L
                 DetailScreen(
                     foodId = id,
-                    navigateBack = { navController.navigateUp() }
                 )
-                {
 
-                }
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
