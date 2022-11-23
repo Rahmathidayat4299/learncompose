@@ -22,7 +22,7 @@ fun ProfileScreen(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Column() {
+        Column {
             AsyncImage(model = "https://raw.githubusercontent.com/Rahmathidayat4299/asset_compose_dicoding/main/rahmathidayat.png", contentDescription ="profil" )
             Text(stringResource(R.string.menu_profile))
             Text(stringResource(R.string.nama))

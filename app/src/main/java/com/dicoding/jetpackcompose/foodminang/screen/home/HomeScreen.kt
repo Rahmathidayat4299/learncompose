@@ -4,10 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.dicoding.jetpackcompose.foodminang.Injection
@@ -36,16 +35,8 @@ fun HomeScreen(
     navController: NavHostController = rememberNavController(),
     viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository())),
     navigateToDetail: (Long) -> Unit,
-
-
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
     Box(modifier = modifier) {
-        val scope = rememberCoroutineScope()
-        val listState = rememberLazyListState()
-        val showButton: Boolean by remember {
-            derivedStateOf { listState.firstVisibleItemIndex > 0 }
-        }
         viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
             when (uiState) {
                 is UiState.Loading -> {
@@ -128,16 +119,15 @@ fun HomeContent(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun FoodListItemPreview() {
-//    FoodMinangTheme {
-//        FoodListItem(
-//            name = "Sala lauak",
-//            photoUrl = "",
-//            99,
-//            onItemClicked = { Long, _ ->  },
-//
-//        )
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun FoodListItemPreview() {
+    FoodMinangTheme {
+        FoodListItem(
+            id =2,
+            name = "dayat",
+            photoUrl = "String",
+            onItemClicked= {},
+        )
+    }
+}

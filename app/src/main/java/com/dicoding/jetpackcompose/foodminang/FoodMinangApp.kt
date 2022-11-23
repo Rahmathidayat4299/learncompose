@@ -31,6 +31,8 @@ import androidx.navigation.navArgument
 import com.dicoding.jetpackcompose.foodminang.screen.home.HomeScreen
 import com.dicoding.jetpackcompose.foodminang.navigation.NavigationItem
 import com.dicoding.jetpackcompose.foodminang.navigation.Screen
+import com.dicoding.jetpackcompose.foodminang.screen.Splash
+import com.dicoding.jetpackcompose.foodminang.screen.SplashScreenAnimated
 import com.dicoding.jetpackcompose.foodminang.screen.detail.DetailScreen
 import com.dicoding.jetpackcompose.foodminang.ui.theme.FoodMinangTheme
 import kotlinx.coroutines.launch
@@ -70,15 +72,21 @@ fun FoodMinangApp(
     }
     Scaffold(
         bottomBar = {
-            BottomBar(navController)
+            if (currentRoute != Screen.DetailScreen.route) {
+                BottomBar(navController)
+            }
+//            BottomBar(navController)
         },
         modifier = modifier
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.SplashScreen.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.SplashScreen.route) {
+                SplashScreenAnimated(navController)
+            }
             composable(Screen.Home.route) {
                 HomeScreen(
                     navigateToDetail = { rewardId ->

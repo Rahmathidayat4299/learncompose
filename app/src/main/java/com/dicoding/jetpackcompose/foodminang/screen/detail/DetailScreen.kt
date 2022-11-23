@@ -1,11 +1,7 @@
 package com.dicoding.jetpackcompose.foodminang.screen.detail
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -78,15 +73,9 @@ fun DetailContent(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(60.dp)
-                        .clip(CircleShape)
+                        .fillMaxWidth()
+                        .height(300.dp)
                 )
-//                Icon(
-//                    imageVector = Icons.Default.ArrowBack,
-//                    contentDescription = stringResource(R.string.back),
-//                    modifier = Modifier.padding(16.dp).clickable { onBackClick() }
-//                )
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -103,21 +92,9 @@ fun DetailContent(
                     text = description,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.h5.copy(
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.Normal
                     ),
                 )
-//                Text(
-//                    text = stringResource(R.string.required_point, basePoint),
-//                    style = MaterialTheme.typography.subtitle1.copy(
-//                        fontWeight = FontWeight.ExtraBold
-//                    ),
-//                    color = MaterialTheme.colors.secondary
-//                )
-//                Text(
-//                    text = stringResource(R.string.lorem_ipsum),
-//                    style = MaterialTheme.typography.body2,
-//                    textAlign = TextAlign.Justify,
-//                )
             }
         }
     }
@@ -125,7 +102,7 @@ fun DetailContent(
 @Preview(showBackground = true)
 @Composable
 fun DetailContentPreview() {
-    FoodMinangTheme() {
+    FoodMinangTheme {
         DetailContent(
             "Jaket Hoodie Dicoding",
             "7500",
