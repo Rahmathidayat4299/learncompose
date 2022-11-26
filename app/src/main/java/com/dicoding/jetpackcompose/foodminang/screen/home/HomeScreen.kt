@@ -16,8 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.dicoding.jetpackcompose.foodminang.Injection
 import com.dicoding.jetpackcompose.foodminang.ViewModelFactory
@@ -32,7 +30,6 @@ import com.dicoding.jetpackcompose.foodminang.util.UiState
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
     viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository())),
     navigateToDetail: (Long) -> Unit,
 ) {

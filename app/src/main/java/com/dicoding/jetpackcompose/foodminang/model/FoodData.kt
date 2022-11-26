@@ -68,7 +68,7 @@ object FoodData {
         ),
         Food(
             11,
-            "Kalio bauik",
+            "Kalio baluik",
             "https://raw.githubusercontent.com/Rahmathidayat4299/asset_compose_dicoding/main/Kalio-baluik-Minangkabau.png",
             "Makanan selanjutnya yang masuk sebagai salah satu makanan khas Minangkabau adalah Kalio baluik. Jika dilihat dari bahan dan cara memasaknya makanan ini sangat mirip dengan rendang."
         ), Food(

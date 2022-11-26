@@ -1,5 +1,7 @@
 package com.dicoding.jetpackcompose.foodminang.screen
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -30,5 +32,6 @@ class HomeViewModel(private val repository: FoodRepository):ViewModel() {
                 }
         }
     }
+
 }
 

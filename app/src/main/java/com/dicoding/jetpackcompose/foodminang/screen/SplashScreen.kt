@@ -31,6 +31,7 @@ fun SplashScreenAnimated(navController: NavController){
     LaunchedEffect(key1 = true ){
         startSplashScreen = true
         delay(4000)
+        navController.popBackStack()
         navController.navigate(Screen.Home.route)
     }
     Splash(alpha = alphanim.value)
@@ -40,7 +41,7 @@ fun SplashScreenAnimated(navController: NavController){
 fun Splash(alpha:Float) {
     Box(
         modifier = Modifier
-            .background(Color.Transparent)
+            .background(Color.White)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ){

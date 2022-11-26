@@ -44,7 +44,6 @@ fun DetailScreen(
                     data.food.imageUrl,
                     data.food.name,
                     data.food.description,
-                    data.count,
                 )
             }
             is UiState.Error -> {}
@@ -55,11 +54,9 @@ fun DetailScreen(
 fun DetailContent(
     photoUrl: String,
     name: String,
-    description:String,
-    count:Int,
+    description: String,
     modifier: Modifier = Modifier,
-
-) {
+    ) {
 
     Column(modifier = modifier) {
         Column(
@@ -106,8 +103,7 @@ fun DetailContentPreview() {
         DetailContent(
             "Jaket Hoodie Dicoding",
             "7500",
-            "1",
-            1
+            "1"
         )
     }
 }

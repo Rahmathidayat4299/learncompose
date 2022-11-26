@@ -20,6 +20,7 @@ init {
     fun listFood(): Flow<List<FoodList>> {
         return flowOf(listFood)
     }
+
     fun getlistFoodById(rewardId: Long): FoodList {
         return listFood.first {
             it.food.id == rewardId

@@ -4,13 +4,11 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,12 +26,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.dicoding.jetpackcompose.foodminang.screen.home.HomeScreen
 import com.dicoding.jetpackcompose.foodminang.navigation.NavigationItem
 import com.dicoding.jetpackcompose.foodminang.navigation.Screen
-import com.dicoding.jetpackcompose.foodminang.screen.Splash
 import com.dicoding.jetpackcompose.foodminang.screen.SplashScreenAnimated
 import com.dicoding.jetpackcompose.foodminang.screen.detail.DetailScreen
+import com.dicoding.jetpackcompose.foodminang.screen.home.HomeScreen
+import com.dicoding.jetpackcompose.foodminang.screen.profil.ProfileScreen
 import com.dicoding.jetpackcompose.foodminang.ui.theme.FoodMinangTheme
 import kotlinx.coroutines.launch
 
@@ -72,10 +70,9 @@ fun FoodMinangApp(
     }
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.DetailScreen.route) {
+            if (currentRoute != Screen.SplashScreen.route && currentRoute != Screen.DetailScreen.route) {
                 BottomBar(navController)
             }
-//            BottomBar(navController)
         },
         modifier = modifier
     ) { innerPadding ->
@@ -88,10 +85,9 @@ fun FoodMinangApp(
                 SplashScreenAnimated(navController)
             }
             composable(Screen.Home.route) {
-                HomeScreen(
-                    navigateToDetail = { rewardId ->
-                        navController.navigate(Screen.DetailScreen.createRoute(rewardId))
-                    })
+                HomeScreen { rewardId ->
+                    navController.navigate(Screen.DetailScreen.createRoute(rewardId))
+                }
             }
             composable(
                 route = Screen.DetailScreen.route,
@@ -102,7 +98,6 @@ fun FoodMinangApp(
                 DetailScreen(
                     foodId = id,
                 )
-
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
@@ -143,37 +138,6 @@ fun ScrollToTopButton(
     }
 }
 
-@Composable
-fun SearchBar(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TextField(
-        value = query,
-        onValueChange = onQueryChange,
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null
-            )
-        },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.surface,
-            disabledIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        placeholder = {
-            Text(stringResource(R.string.search_food))
-        },
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .heightIn(min = 48.dp)
-            .clip(RoundedCornerShape(16.dp))
-    )
-}
 
 //bottom nav
 @Composable
