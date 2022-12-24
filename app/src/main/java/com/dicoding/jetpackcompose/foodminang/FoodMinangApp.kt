@@ -30,6 +30,7 @@ import com.dicoding.jetpackcompose.foodminang.navigation.NavigationItem
 import com.dicoding.jetpackcompose.foodminang.navigation.Screen
 import com.dicoding.jetpackcompose.foodminang.screen.SplashScreenAnimated
 import com.dicoding.jetpackcompose.foodminang.screen.detail.DetailScreen
+import com.dicoding.jetpackcompose.foodminang.screen.home.FoodTopAppBar
 import com.dicoding.jetpackcompose.foodminang.screen.home.HomeScreen
 import com.dicoding.jetpackcompose.foodminang.screen.profil.ProfileScreen
 import com.dicoding.jetpackcompose.foodminang.ui.theme.FoodMinangTheme
@@ -69,6 +70,9 @@ fun FoodMinangApp(
         }
     }
     Scaffold(
+        topBar = {
+                 FoodTopAppBar()
+        },
         bottomBar = {
             if (currentRoute != Screen.SplashScreen.route && currentRoute != Screen.DetailScreen.route) {
                 BottomBar(navController)
